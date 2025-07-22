@@ -1,36 +1,38 @@
+// src/main/java/minip/miniproject/controller/MenuController.java
 package minip.miniproject.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import minip.miniproject.model.DrinkTemperature;
 import minip.miniproject.model.Menu;
-import minip.miniproject.model.MenuCategory;
+import minip.miniproject.service.MenuService;
+import minip.miniproject.service.MenuServiceImpl;
 
-
-
+// @Controller 어노테이션은 그대로 둡니다.
 public class MenuController {
-    private List<Menu> menuList;
+
+    private final MenuService menuService;
 
     public MenuController() {
-        menuList = new ArrayList<>();
-
-        menuList.add(new Menu("M001", MenuCategory.커피, "아메리카노", 4500, DrinkTemperature.ICE));
-        menuList.add(new Menu("M002", MenuCategory.커피, "카페라떼", 5000, DrinkTemperature.HOT));
-        menuList.add(new Menu("T001", MenuCategory.차, "녹차", 4000, DrinkTemperature.HOT));
-        menuList.add(new Menu("J001", MenuCategory.주스, "오렌지주스", 4800, DrinkTemperature.ICE));
+        this.menuService = new MenuServiceImpl();
     }
 
-    public List<Menu> getMenuList() {
-        return menuList;
+    /**
+     * 모든 메뉴 '목록을 반환'하는 메소드
+     * (이전의 displayAllMenus에서 변경)
+     * @return Menu 객체 리스트
+     */
+    public List<Menu> getAllMenus() {
+        // Service를 호출해서 데이터를 그대로 반환합니다.
+        return menuService.getAllMenus();
     }
 
-    public Menu getMenuByName(String m_name) {
-        for (Menu menu : menuList) {
-            if (menu.getM_name().equals(m_name)) {
-                return menu;
-            }
-        }
-        return null;
+    /**
+     * 이름으로 메뉴 '객체를 반환'하는 메소드
+     * (이전의 findAndDisplayMenu에서 변경)
+     * @param name 검색할 메뉴 이름
+     * @return 찾아낸 Menu 객체 (없으면 null)
+     */
+    public Menu getMenuByName(String name) {
+        // Service를 호출해서 데이터를 그대로 반환합니다.
+        return menuService.getMenuByName(name);
     }
 }

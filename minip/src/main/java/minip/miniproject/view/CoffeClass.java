@@ -1,5 +1,6 @@
 package minip.miniproject.view;
 
+import java.util.List;
 import java.util.Scanner;
 
 import minip.miniproject.controller.CartController;
@@ -25,6 +26,7 @@ public class CoffeClass {
 
 	public static void main(String[] args) {
 		MenuController menuController = new MenuController();
+		
 		Scanner sc = new Scanner(System.in);
 
 		String[] lines = { "  /$$$$$$             /$$$$$$   /$$$$$$  /$$            /$$$$$$           ",
@@ -129,17 +131,24 @@ public class CoffeClass {
 									while (true) {
 										System.out.println("\n--- 전체 메뉴 목록 ---");
 										int i = 1;
-										for (Menu m : menuController.getMenuList()) {
-											System.out.println("[" + (i++) + "] " + m);
+										// 1. Controller를 통해 전체 메뉴 '데이터'를 가져옴
+										List<Menu> allMenus = menuController.getAllMenus(); 
+										for (Menu m : allMenus) {
+										    System.out.println("[" + (i++) + "] " + m);
 										}
+
 										System.out.print("\n장바구니의 추가할 메뉴를 입력해주세요(뒤로가려면 exit): ");
 										String menuName = sc.nextLine().trim();
+
 										if (menuName.equalsIgnoreCase("exit"))
-											break;
-										Menu menu = menuController.getMenuByName(menuName);
+										    break;
+
+										// 2. Controller를 통해 메뉴 이름으로 '데이터'를 검색
+										Menu menu = menuController.getMenuByName(menuName); 
+
 										if (menu == null) {
-											System.out.println("존재하지 않는 메뉴입니다.");
-											continue;
+										    System.out.println("존재하지 않는 메뉴입니다.");
+										    continue;
 										}
 
 										// 여기가 "장바구니에 추가"루틴

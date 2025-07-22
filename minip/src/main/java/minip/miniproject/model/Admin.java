@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class Admin extends User {
 	
 	private String admin_name;
@@ -19,30 +21,6 @@ public class Admin extends User {
 		super(user_id, user_pw);  
 		this.admin_name = admin_name;
 		this.admin_level = admin_level;
-		this.last_login_date_time = last_login_date_time;
-	}
-
-	public String getAdmin_name() {
-		return admin_name;
-	}
-
-	public void setAdmin_name(String admin_name) {
-		this.admin_name = admin_name;
-	}
-
-	public int getAdmin_level() {
-		return admin_level;
-	}
-
-	public void setAdmin_level(int admin_level) {
-		this.admin_level = admin_level;
-	}
-
-	public LocalDateTime getLast_login_date_time() {
-		return last_login_date_time;
-	}
-
-	public void setLast_login_date_time(LocalDateTime last_login_date_time) {
 		this.last_login_date_time = last_login_date_time;
 	}
 }
