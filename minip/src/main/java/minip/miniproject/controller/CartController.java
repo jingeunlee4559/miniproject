@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 
 import minip.miniproject.model.*;
 import minip.miniproject.service.CartService;
+import minip.miniproject.service.OrderService;
 
 @Controller
 public class CartController {
@@ -16,14 +17,16 @@ public class CartController {
     private final CartService cartService;
     private final OrderController orderController;
     private final PaymentController paymentController;
+    private final OrderService orderService;
     private Scanner sc;
 
     @Autowired
-    public CartController(String nickname, CartService cartService, OrderController orderController, PaymentController paymentController) {
+    public CartController(String nickname, CartService cartService, OrderController orderController, PaymentController paymentController, OrderService orderService) {
         this.cart = new Cart(nickname);
         this.cartService = cartService;
         this.orderController = orderController;
         this.paymentController = paymentController;
+        this.orderService = orderService;
         this.sc = new Scanner(System.in);
     }
     
@@ -151,6 +154,7 @@ public class CartController {
 
         // 1. 주문 객체 생성 (OrderController 이용)
         Order order = orderController.createOrder(cart);
+        orderService.addOrder(order);
 
         // 2. 결제 (PaymentController에서 처리)
         Payment payment = paymentController.makePayment(order, sc);

@@ -127,7 +127,7 @@ public class CoffeClass {
 
 							CartService cartService = new CartService();
 							CartController cartController = new CartController(
-							    loginUser.getMem_nick(), cartService, orderController, paymentController
+							    loginUser.getMem_nick(), cartService, orderController, paymentController, orderService
 							);
 							
 							while (true) {
@@ -211,8 +211,16 @@ public class CoffeClass {
 					break;
 
 				case 2:
-					System.out.println("관리자 모드는 추후 구현 예정입니다.");
-					break;
+					System.out.print("관리자 비밀번호를 입력하세요: ");
+					String adminPass = sc.nextLine().trim();  // trim() 추가
+
+					if (adminPass.equals("123456789")) {
+					    int totalSales = orderController.getTotalSales();
+					    System.out.println("\n📊 현재까지의 총 매출: " + color(0, 255, 100) + totalSales + "원" + RESET);
+					} else {
+					    System.out.println("❌ 비밀번호가 틀렸습니다.");
+					}
+				    break;
 
 				default:
 					System.out.println("잘못된 입력입니다. 다시 선택해주세요.");

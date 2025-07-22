@@ -22,6 +22,10 @@ public class OrderController {
     public Order createOrder(Cart cart) {
         return orderService.createOrder(cart);
     }
+    
+    public int getTotalSales() {
+        return orderService.calculateTotalSales();
+    }
 
     // 회원 닉네임으로 주문내역 조회
     public void getOrderDetails(String memNick, PaymentController paymentController, Scanner sc) {

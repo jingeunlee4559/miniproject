@@ -9,7 +9,9 @@ import minip.miniproject.model.*;
 
 @Service
 public class OrderService {
-    private final List<Order> orderHistory = new ArrayList<>();
+	private final List<Order> orderHistory = new ArrayList<>();
+    
+    
 
     public Order createOrder(Cart cart) {
         String orderId = UUID.randomUUID().toString();
@@ -24,9 +26,20 @@ public class OrderService {
         orderHistory.add(order);
         return order;
     }
+    public void addOrder(Order order) {
+        orderHistory.add(order);
+    }
 
     public List<Order> getOrderHistory() {
         return new ArrayList<>(orderHistory);
+    }
+    
+    public int calculateTotalSales() {
+        int total = 0;
+        for (minip.miniproject.model.Order o : orderHistory) {
+            total += o.getTotalPrice();
+        }
+        return total;
     }
 
     public List<Order> getMyOrders(String memNick) {
