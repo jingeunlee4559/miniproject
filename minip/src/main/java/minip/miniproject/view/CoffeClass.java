@@ -11,8 +11,10 @@ import minip.miniproject.controller.UserController;
 import minip.miniproject.model.DrinkTemperature;
 import minip.miniproject.model.Member;
 import minip.miniproject.model.Menu;
-
-
+import minip.miniproject.service.CartService;
+import minip.miniproject.service.OrderService;
+import minip.miniproject.service.PaymentService;
+import minip.miniproject.service.UserService;
 
 public class CoffeClass {
 
@@ -23,9 +25,20 @@ public class CoffeClass {
 	}
 
 	public static final String RESET = "\u001B[0m";
+
 	// ddd
 	public static void main(String[] args) {
 		MenuController menuController = new MenuController();
+		
+		OrderService orderService = new OrderService();
+		OrderController orderController = new OrderController(orderService);
+		
+		PaymentService paymentService = new PaymentService();
+		PaymentController paymentController = new PaymentController(paymentService);
+		
+		UserService userService = new UserService();
+		UserController userController = new UserController(userService);
+
 		
 		Scanner sc = new Scanner(System.in);
 
@@ -106,16 +119,17 @@ public class CoffeClass {
 					int num1 = Integer.parseInt(num1Str);
 
 					if (num1 == 1) { // 로그인
-						Member loginUser = UserController.loginMember();
-					
-						
+						  Member loginUser = userController.loginMember();
+
 						if (loginUser != null) {
 							System.out.println(
 									"\n" + color(100, 255, 100) + loginUser.getMem_nick() + "님 환영합니다!" + RESET);
 
-							OrderController orderController = new OrderController();
-							PaymentController paymentController = new PaymentController();
-							CartController cartController = new CartController(loginUser.getMem_nick(), orderController, paymentController);
+							CartService cartService = new CartService();
+							CartController cartController = new CartController(
+							    loginUser.getMem_nick(), cartService, orderController, paymentController
+							);
+							
 							while (true) {
 								System.out.println("\n[1] 정보수정 [2] 장바구니 [3] 메뉴 조회 [4]주문내역 [0] 로그아웃");
 								System.out.print(color(0, 255, 150) + "선택 ▶ " + RESET);
@@ -123,32 +137,32 @@ public class CoffeClass {
 								int num2 = Integer.parseInt(num2Str);
 
 								if (num2 == 1) {
-									UserController.updateMemberInfo(null);
+									userController.updateMemberInfo(loginUser);
 								} else if (num2 == 2) {
 									// ★ 장바구니 기능 실행!
 									cartController.start();
-								} else if (num2 == 3) { 
+								} else if (num2 == 3) {
 									while (true) {
 										System.out.println("\n--- 전체 메뉴 목록 ---");
 										int i = 1;
 										// 1. Controller를 통해 전체 메뉴 '데이터'를 가져옴
-										List<Menu> allMenus = menuController.getAllMenus(); 
+										List<Menu> allMenus = menuController.getAllMenus();
 										for (Menu m : allMenus) {
-										    System.out.println("[" + (i++) + "] " + m);
+											System.out.println("[" + (i++) + "] " + m);
 										}
 
 										System.out.print("\n장바구니의 추가할 메뉴를 입력해주세요(뒤로가려면 exit): ");
 										String menuName = sc.nextLine().trim();
 
 										if (menuName.equalsIgnoreCase("exit"))
-										    break;
+											break;
 
 										// 2. Controller를 통해 메뉴 이름으로 '데이터'를 검색
-										Menu menu = menuController.getMenuByName(menuName); 
+										Menu menu = menuController.getMenuByName(menuName);
 
 										if (menu == null) {
-										    System.out.println("존재하지 않는 메뉴입니다.");
-										    continue;
+											System.out.println("존재하지 않는 메뉴입니다.");
+											continue;
 										}
 
 										// 여기가 "장바구니에 추가"루틴
@@ -178,10 +192,10 @@ public class CoffeClass {
 										if (sc.nextLine().trim().equalsIgnoreCase("N"))
 											break;
 									}
-								}else if (num2 == 4) {
-									orderController.getOrderDetails(loginUser.getMem_nick(), paymentController, sc);;
-								}
-								else if (num2 == 0) {
+								} else if (num2 == 4) {
+									orderController.getOrderDetails(loginUser.getMem_nick(), paymentController, sc);
+									;
+								} else if (num2 == 0) {
 									System.out.println("로그아웃 되었습니다.");
 									break;
 								} else {
@@ -190,7 +204,7 @@ public class CoffeClass {
 							}
 						}
 					} else if (num1 == 2) {
-						UserController.joinMember();
+						userController.joinMember();
 					} else {
 						System.out.println("잘못된 입력입니다.");
 					}

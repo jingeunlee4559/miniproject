@@ -1,32 +1,30 @@
 package minip.miniproject.controller;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-import minip.miniproject.model.Cart;
-import minip.miniproject.model.CartItem;
-import minip.miniproject.model.DrinkTemperature;
-import minip.miniproject.model.Menu;
-import minip.miniproject.model.Order;
-import minip.miniproject.model.OrderStatus;
-import minip.miniproject.model.Payment;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
+import minip.miniproject.model.*;
+import minip.miniproject.service.CartService;
 
+@Controller
 public class CartController {
 
     private Cart cart;
+    private final CartService cartService;
+    private final OrderController orderController;
+    private final PaymentController paymentController;
     private Scanner sc;
-    private OrderController orderController;
-    private PaymentController paymentController;
-    private Payment lastPayment = null;
-    private Order lastOrder = null;
 
-    public CartController(String nickname, OrderController orderController, PaymentController paymentController) {
+    @Autowired
+    public CartController(String nickname, CartService cartService, OrderController orderController, PaymentController paymentController) {
         this.cart = new Cart(nickname);
-        this.sc = new Scanner(System.in);
+        this.cartService = cartService;
         this.orderController = orderController;
         this.paymentController = paymentController;
+        this.sc = new Scanner(System.in);
     }
 
     public void start() {
@@ -37,15 +35,13 @@ public class CartController {
             } else {
                 cart.printCart();
             }
-            System.out.println(
-                    "\n[1] 장바구니 전체 삭제\n[2] 개별 삭제\n[3] 수량 수정\n[4] 주문 \n0] 이전으로");
+            System.out.println("\n[1] 장바구니 전체 삭제\n[2] 개별 삭제\n[3] 수량 수정\n[4] 주문 \n0] 이전으로");
             System.out.print("선택 ▶ ");
-
             String sel = sc.nextLine().trim();
 
             switch (sel) {
                 case "1":
-                    cart.clearCart();
+                    cartService.clearCart(cart);
                     System.out.println("✅ 장바구니가 전체 삭제되었습니다.");
                     break;
                 case "2":
@@ -57,7 +53,6 @@ public class CartController {
                 case "4":
                     placeOrder();
                     break;
-
                 case "0":
                     return;
                 default:
@@ -74,7 +69,7 @@ public class CartController {
                 temp,
                 menu.getM_price()
         );
-        cart.addItem(item);
+        cartService.addItemToCart(cart, item);
     }
 
     private void removeItem() {
@@ -100,10 +95,8 @@ public class CartController {
             System.out.println("잘못된 번호입니다.");
             return;
         }
-        CartItem removed = cart.getCart_items().remove(idx - 1);
-        cart.calculateTotal();
-        System.out.println("✅ [" + removed.getMenu_name() + "] (" + removed.getDrinkTemp() + " x "
-                + removed.getQuantity() + ") 항목이 삭제되었습니다.");
+        cartService.removeItem(cart, idx - 1);
+        System.out.println("✅ 항목이 삭제되었습니다.");
     }
 
     private void updateQuantity() {
@@ -112,8 +105,7 @@ public class CartController {
             return;
         }
         cart.printCart();
-        System.out.print("\n수량을 수정할 항목의 번호를 입력하세요 (1~"
-                + cart.getCart_items().size() + ", 취소: 0): ");
+        System.out.print("\n수량을 수정할 항목의 번호를 입력하세요 (1~" + cart.getCart_items().size() + ", 취소: 0): ");
         String input = sc.nextLine().trim();
         int idx;
         try {
@@ -144,9 +136,7 @@ public class CartController {
             System.out.println("숫자를 정확히 입력해 주세요.");
             return;
         }
-        cart.getCart_items().set(idx - 1, new CartItem(item.getMenu_category(), item.getMenu_name(), newQty,
-                item.getDrinkTemp(), item.getItem_price()));
-        cart.calculateTotal();
+        cartService.updateQuantity(cart, idx - 1, newQty);
         System.out.println("✅ 수량이 수정되었습니다.");
     }
 
@@ -159,16 +149,14 @@ public class CartController {
 
         // 1. 주문 객체 생성 (OrderController 이용)
         Order order = orderController.createOrder(cart);
-        lastOrder = order;
 
         // 2. 결제 (PaymentController에서 처리)
         Payment payment = paymentController.makePayment(order, sc);
-        lastPayment = payment;
 
         // 3. 결제 결과 확인 및 출력
         if (payment.isPayment_successful()) {
             order.setOrder_status(OrderStatus.결제완료);
-            cart.clearCart();
+            cartService.clearCart(cart);
             System.out.println("✅ 결제가 성공적으로 완료되었습니다!");
         } else {
             order.setOrder_status(OrderStatus.결제실패);
@@ -200,6 +188,4 @@ public class CartController {
         System.out.println("────────────────────────────────────────────");
         System.out.println("총합계: " + String.format("%,d원", total));
     }
-
-
 }
