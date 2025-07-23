@@ -21,6 +21,13 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+    public List<Member> getAllMembers() {
+        return userService.getAllMembers();
+    }
+
+    public List<Member> getMemberList() {
+        return userService.getMemberList();
+    }
 
     public void joinMember() {
         System.out.println("회원가입입니다.");
@@ -132,7 +139,7 @@ public class UserController {
         }
     }
 
-    public List<Member> getMemberList() {
-        return userService.getMemberList();
-    }
+    
+
+
 }

@@ -211,25 +211,54 @@ public class CoffeClass {
 					break;
 
 				case 2:
-					System.out.print("관리자 비밀번호를 입력하세요: ");
-					String adminPass = sc.nextLine().trim();  // trim() 추가
+	                System.out.print("관리자 비밀번호를 입력하세요: ");
+	                String adminPass = sc.nextLine().trim();
 
-					if (adminPass.equals("123456789")) {
-					    int totalSales = orderController.getTotalSales();
-					    System.out.println("\n📊 현재까지의 총 매출: " + color(0, 255, 100) + totalSales + "원" + RESET);
-					} else {
-					    System.out.println("❌ 비밀번호가 틀렸습니다.");
-					}
-				    break;
+	                if (adminPass.equals("123456789")) {
+	                    while (true) {
+	                        System.out.println("\n" + color(255, 215, 0) + "🛠 관리자 메뉴" + RESET);
+	                        System.out.println("[1] 총매출 보기");
+	                        System.out.println("[2] 고객 명단 보기");
+	                        System.out.println("[3] 로그아웃");
 
-				default:
-					System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
-				}
-			} catch (NumberFormatException e) {
-				System.out.println("⚠ 숫자만 입력해주세요!");
-			}
-		}
+	                        System.out.print(color(0, 255, 150) + "선택 ▶ " + RESET);
+	                        String adminMenuInput = sc.nextLine();
 
-		sc.close();
+	                        if (adminMenuInput.equals("1")) {
+	                            int totalSales = orderController.getTotalSales();
+	                            System.out.println("\n📊 현재까지의 총 매출: " + color(0, 255, 100) + totalSales + "원" + RESET);
+
+	                        } else if (adminMenuInput.equals("2")) {
+	                            List<Member> members = userController.getAllMembers(); // 이 메서드 UserController에 반드시 구현 필요
+	                            System.out.println("\n📋 전체 회원 명단:");
+	                            for (Member m : members) {
+	                                System.out.println("- " + m.getMem_nick() + " (" + m.getUser_id() + ")");
+	                            }
+
+	                        } else if (adminMenuInput.equals("3")) {
+	                            System.out.println("🔒 관리자 모드를 종료합니다.");
+	                            break;
+	                        } else {
+	                            System.out.println("⚠ 올바른 메뉴 번호를 입력해주세요.");
+	                        }
+	                    }
+	                } else {
+	                    System.out.println("❌ 비밀번호가 틀렸습니다.");
+	                }
+	                break;
+
+	            default:
+	                System.out.println("⚠ 올바른 메뉴 번호를 입력해주세요.");
+	        }
+
+	    } catch (NumberFormatException e) {
+	        System.out.println("⚠ 숫자만 입력해주세요.");
+	    } catch (Exception e) {
+	        System.out.println("⚠ 예기치 못한 오류가 발생했습니다.");
+	        e.printStackTrace();
+	    }
+	}
+
+	 sc.close();
 	}
 }
