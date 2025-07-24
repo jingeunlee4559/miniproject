@@ -1,5 +1,8 @@
 package minip.miniproject.model;
 
+import lombok.Data;
+
+@Data
 public class Menu {
 
     private String m_id;
@@ -22,10 +25,6 @@ public class Menu {
         return String.format(" • [%s] %-15s - %-8s (%s)", m_category.name(), m_name, formattedPrice, m_option.name());
     }
 
-    // Getters
-    public String getM_id() { return m_id; }
-    public MenuCategory getM_category() { return m_category; }
-    public String getM_name() { return m_name; }
-    public int getM_price() { return m_price; }
-    public DrinkTemperature getM_option() { return m_option; }
+
+
 }

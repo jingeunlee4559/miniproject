@@ -24,6 +24,9 @@ public class UserService {
         }
         return false;
     }
+    public List<Member> getAllMembers() {
+        return memberList;  // memberList는 회원 정보 리스트 필드
+    }
 
     public void joinMember(String id, String pw, String nick, String phone, mem_gender gender)
             throws UserFormatException {
