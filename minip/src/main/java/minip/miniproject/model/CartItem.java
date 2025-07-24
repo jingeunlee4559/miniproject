@@ -19,6 +19,7 @@ public class CartItem {
     }
 
     public int getSubtotal() {
+    	System.out.println("getSubtotal" + (item_price * quantity));
         return item_price * quantity;
     }
 
