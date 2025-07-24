@@ -101,7 +101,7 @@ public class CoffeClass {
 			try {
 				System.out.println(
 						"\n" + color(255, 215, 0) + "━━━━━━━━━━━━━━━━━━━━━━ 메뉴 ━━━━━━━━━━━━━━━━━━━━━━" + RESET);
-				System.out.println(color(255, 255, 255) + "[1] 회원 모드 [2] 관리자 모드 [3] 종료" + RESET);
+				System.out.println("[1] 회원 모드 [2] 관리자 모드 [3] 종료");
 				System.out.print(color(0, 255, 150) + "선택 ▶ " + RESET);
 				String inputStr = sc.nextLine();
 				int input = Integer.parseInt(inputStr);

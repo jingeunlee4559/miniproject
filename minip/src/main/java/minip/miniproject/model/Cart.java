@@ -3,6 +3,9 @@ package minip.miniproject.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class Cart {
 	private String mem_nick;
 	private List<CartItem> cart_items;
@@ -29,17 +32,6 @@ public class Cart {
 		return total_price;
 	}
 
-	public List<CartItem> getCart_items() {
-		return cart_items;
-	}
-
-	public int getTotal_price() {
-		return total_price;
-	}
-
-	public String getMem_nick() {
-		return mem_nick;
-	}
 
 	public void printCart() {
 		System.out.println("\n🛒 장바구니 목록:");

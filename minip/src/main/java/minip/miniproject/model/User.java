@@ -1,5 +1,8 @@
 package minip.miniproject.model;
 
+import lombok.Data;
+
+@Data
 public class User {
 
     private String user_id;
@@ -11,10 +14,6 @@ public class User {
         setUser_pw(user_pw);  
     }
 
-    public String getUser_id() {
-        return user_id;
-    }
-
     public void setUser_id(String user_id) throws UserFormatException {
         if (user_id == null) {
             throw new UserFormatException("아이디는 null이 될 수 없습니다.");
@@ -24,9 +23,6 @@ public class User {
         this.user_id = user_id;
     }
 
-    public String getUser_pw() {
-        return user_pw;
-    }
 
     public void setUser_pw(String user_pw) throws UserFormatException {
         if (user_pw == null) {
