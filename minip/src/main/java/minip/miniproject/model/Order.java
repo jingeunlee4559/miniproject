@@ -19,6 +19,15 @@ public class Order {
         this.order_time = order_time;
         this.order_status = order_status;
     }
+    public int getTotalPrice() {
+        int total = 0;
+        if (order_items != null) {
+            for (CartItem item : order_items) {
+                total += item.getSubtotal();
+            }
+        }
+        return total;
+    }
     
     
     public void setOrder_id(String order_id) {
