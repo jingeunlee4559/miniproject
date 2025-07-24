@@ -38,7 +38,7 @@ public class CartController {
             } else {
                 cart.printCart();
             }
-            System.out.println("\n[1] 장바구니 전체 삭제\n[2] 개별 삭제\n[3] 수량 수정\n[4] 주문 \n [0] 이전으로");
+            System.out.println("\n[1] 장바구니 전체 삭제\n[2] 개별 삭제\n[3] 수량 수정\n[4] 주문 \n[0] 이전으로");
             System.out.print("선택 ▶ ");
             String sel = sc.nextLine().trim();
 

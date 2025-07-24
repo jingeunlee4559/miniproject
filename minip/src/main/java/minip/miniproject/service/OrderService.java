@@ -39,7 +39,7 @@ public class OrderService {
         for (minip.miniproject.model.Order o : orderHistory) {
             total += o.getTotalPrice();
         }
-        System.out.println(" calculateTotalSales"+total);
+ 
         return total;
     }
 
