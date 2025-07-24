@@ -23,7 +23,7 @@ public class OrderService {
             LocalDateTime.now(),
             OrderStatus.주문완료
         );
-        orderHistory.add(order);
+
         return order;
     }
     public void addOrder(Order order) {
@@ -39,6 +39,7 @@ public class OrderService {
         for (minip.miniproject.model.Order o : orderHistory) {
             total += o.getTotalPrice();
         }
+        System.out.println(" calculateTotalSales"+total);
         return total;
     }
 
