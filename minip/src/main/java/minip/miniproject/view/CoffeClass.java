@@ -26,7 +26,6 @@ public class CoffeClass {
 
 	public static final String RESET = "\u001B[0m";
 
-	// ddd
 	public static void main(String[] args) {
 		MenuController menuController = new MenuController();
 		
